@@ -4,6 +4,7 @@ let director;
 let episode;
 let charactersDiv;
 let planetDiv;
+const charactersList = document.querySelector("#charactersList")
 const baseUrl = `https://swapi2.azurewebsites.net/api`;
 
 // Runs on page load
@@ -19,11 +20,11 @@ addEventListener('DOMContentLoaded', () => {
   getFilm(id)
 });
 
-async function getFilms(id) {
+async function getFilm(id) {
     let films;
     try {
       films = await fetchFilms(id)
-      films.character = await fetchCharacters(films)
+      films.characters = await fetchCharacters(films)
       films.planets = await fetchPlanets(films)
     }
     catch (ex) {
@@ -39,24 +40,39 @@ async function fetchFilms(id) {
 }
 
 async function fetchCharacters(films) {
-    const url = `${baseUrl}/films/${id}/characters`;
+    const url = `${baseUrl}/films/${films.id}/characters`;
     const characters = await fetch(url)
         .then(res => res.json())
     return characters;
 }
 
 async function fetchPlanets(films) {
-    const url = `${baseUrl}/films/${id}/planets`;
+    const url = `${baseUrl}/films/${films.id}/planets`;
     const planets = await fetch(url)
         .then(res => res.json())
     return planets;
 }
 
 const renderFilms = films => {
-    document.title = `SWAPI - ${films?.name}`;  // Just to make the browser tab say their name
-    filmName.textContent = films?.name;
-    released.textContent = films?.released;
+    console.log(films);
+    document.title = `SWAPI - ${films?.title}`;  // Just to make the browser tab say their name
+    filmName.textContent = films?.title;
+    released.textContent = films?.release_date;
     director.textContent = films?.director;
-    episode.textContent = films?.episode;
+    episode.textContent = films?.episode_id;
+    renderCharacters(films.characters);
+    const planetsLis = films?.planets?.map(planet => `<li><a href="/planet.html?id=${planet.id}">${planet.name}</li>`)
+    planetsUl.innerHTML = planetsLis.join("");
+  }
+
+  const renderCharacters = characters => {
+    const divs = characters.map(character => {
+      const el = document.createElement('div');
+      el.addEventListener('click', () => goToCharacterPage(character.id));
+      el.textContent = character.name;
+      return el;
+    })
+    charactersList.replaceChildren(...divs)
   }
   
+  const goToCharacterPage = id => window.location = `/character.html?id=${id}`
