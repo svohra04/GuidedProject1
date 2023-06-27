@@ -10,9 +10,15 @@ p {
   padding: 0;
 }
 
+body {
+  background-image: url('background.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
 :root {
   font-family: Arial, Helvetica, sans-serif;
-  --dark1: black;
+  --dark1: white;
   --light1: white;
   --dark2: darkblue;
   --light2: lightblue;
@@ -69,9 +75,19 @@ label {
   font-weight: bold;
 }
 
+#charactersList div:hover {
+  background-color: white;
+  color: black;
+}
+
 /* Character page */
-h1#name {
-  margin: 50px;
+h1#name, h2#characterTitle, h1#filmName {
+  padding: 50px;
+}
+
+h1#planetName {
+  padding: 50px;
+  padding-bottom: 0px;
 }
 
 #generalInfo {
@@ -121,3 +137,11 @@ section#films a {
   border-radius: 5px;
   border: 1px solid var(--dark2);
 }
+
+section#planets a:hover,
+section#characters a:hover,
+section#films a:hover {
+  background-color: white;
+  color: black;
+}
+
